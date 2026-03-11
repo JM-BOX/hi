@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CareFit - 통합 헬스케어 플랫폼</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    /* CareFit 맞춤형 디자인 (style.css 대체) */
+    :root {
+      --primary: #005088; /* 메디컬 블루 */
+      --secondary: #11caa0; /* 에메랄드 그린 */
+      --bg-light: #f8fafc;
+      --text-dark: #334155;
+      --text-gray: #64748b;
+    }
+    
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Pretendard', sans-serif; }
+    body { color: var(--text-dark); background-color: var(--bg-light); line-height: 1.6; }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    
+    /* 헤더 및 네비게이션 */
+    header { background: linear-gradient(rgba(0,80,136,0.9), rgba(0,80,136,0.9)), url('https://images.unsplash.com/photo-1576091160550-2173ff9e5ee5?auto=format&fit=crop&w=1920&q=80') center/cover; color: white; padding-bottom: 80px; }
+    nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; }
+    .logo { font-size: 28px; font-weight: 800; color: white; letter-spacing: 1px; }
+    nav div { display: flex; gap: 15px; align-items: center; }
+    nav button { background: transparent; border: 1px solid white; color: white; padding: 8px 16px; border-radius: 20px; cursor: pointer; transition: 0.3s; }
+    nav button:hover { background: white; color: var(--primary); }
+    .hidden { display: none !important; }
+    #user-status { font-weight: bold; color: var(--secondary); }
+    
+    .header-content { text-align: center; margin-top: 80px; padding: 0 20px; }
+    .header-content h2 { font-size: 48px; margin-bottom: 10px; }
+    .header-content h3 { font-size: 24px; font-weight: 400; margin-bottom: 30px; opacity: 0.9; }
+    
+    .add-search { display: flex; justify-content: center; max-width: 500px; margin: 20px auto; }
+    .add-search input { flex: 1; padding: 15px 20px; border: none; border-radius: 30px 0 0 30px; outline: none; font-size: 16px; }
+    .add-search button { background: var(--secondary); border: none; color: white; padding: 15px 30px; border-radius: 0 30px 30px 0; cursor: pointer; font-weight: bold; font-size: 16px; transition: 0.3s; }
+    .add-search button:hover { background: #0ea884; }
+
+    /* 공통 섹션 스타일 */
+    section { padding: 80px 5%; text-align: center; }
+    section h2 { font-size: 32px; color: var(--primary); margin-bottom: 40px; }
+
+    /* 배너 섹션 */
+    #banner { background-color: white; border-bottom: 1px solid #e2e8f0; }
+    .banner-content h3 { font-size: 24px; margin-bottom: 10px; }
+    .banner-content p { color: var(--text-gray); margin-bottom: 20px; }
+    #banner-btn { background: var(--primary); color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 16px; margin-bottom: 40px;}
+    .select-menu { padding: 12px; font-size: 16px; border-radius: 8px; border: 1px solid #cbd5e1; outline: none; min-width: 250px; }
+
+    /* 멤버십 섹션 */
+    #membership { background-color: #f0fdfa; }
+    .membership-content { background: white; max-width: 600px; margin: 0 auto; padding: 40px; border-radius: 16px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); border-top: 4px solid var(--secondary); }
+    .membership-content h3 { font-size: 22px; margin-bottom: 15px; color: var(--primary); }
+    .membership-content p { margin-bottom: 10px; font-size: 18px; }
+
+    /* 가이드 (카드) 섹션 */
+    .choice-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
+    .card { background: white; padding: 30px 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: 0.3s; border: 1px solid #e2e8f0; }
+    .card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+    .card h3 { color: var(--primary); margin-bottom: 10px; }
+    .card p { color: var(--text-gray); font-size: 14px; margin-bottom: 20px; }
+    .card .icon-img { font-size: 48px; color: var(--secondary); margin-top: 20px; }
+
+    /* FAQ 및 뉴스레터 */
+    #faq { background: white; text-align: left; max-width: 800px; margin: 0 auto; }
+    #faq h2 { text-align: center; }
+    .accordion { margin-bottom: 50px; }
+    .accordion li { border-bottom: 1px solid #e2e8f0; }
+    .accordion input { display: none; }
+    .accordion label { display: block; padding: 20px; font-weight: bold; cursor: pointer; color: var(--primary); position: relative; }
+    .accordion label::after { content: '+'; position: absolute; right: 20px; font-size: 20px; }
+    .accordion input:checked + label::after { content: '-'; }
+    .content { max-height: 0; overflow: hidden; transition: 0.3s; padding: 0 20px; background: var(--bg-light); color: var(--text-gray); }
+    .accordion input:checked ~ .content { max-height: 200px; padding: 20px; }
+    .newsletter { text-align: center; background: #f8fafc; padding: 40px; border-radius: 12px; }
+
+    /* 푸터 */
+    footer { background: #1e293b; color: #94a3b8; padding: 60px 5% 20px; }
+    .footer-content { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 30px; margin-bottom: 40px; border-bottom: 1px solid #334155; padding-bottom: 40px; }
+    .footer-content h2 { color: white; font-size: 20px; margin-bottom: 20px; }
+    .footer-nav li, .footer-info p { margin-bottom: 10px; font-size: 14px; }
+    .socials { display: flex; gap: 15px; margin-top: 20px; font-size: 24px; color: white; }
+    .copyright { text-align: center; font-size: 14px; }
+
+    /* 모달 공통 */
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; visibility: hidden; transition: 0.3s; }
+    .modal-overlay.active { opacity: 1; visibility: visible; }
+    .modal-content { background: white; padding: 40px; border-radius: 16px; width: 90%; max-width: 400px; position: relative; text-align: center; transform: translateY(-20px); transition: 0.3s; }
+    .modal-overlay.active .modal-content { transform: translateY(0); }
+    .close-btn { position: absolute; top: 15px; right: 20px; font-size: 28px; cursor: pointer; color: #94a3b8; }
+    .modal-content h2 { color: var(--primary); margin-bottom: 20px; }
+    .modal-content input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; }
+    .submit-btn { width: 100%; background: var(--primary); color: white; padding: 14px; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; }
+    .error-msg { color: #ef4444; font-size: 14px; margin-bottom: 15px; min-height: 20px; }
+
+    /* 위로 가기 버튼 스타일 */
+    #go-top-btn {
+      position: fixed; bottom: 30px; right: 30px; background-color: var(--primary); color: white;
+      width: 50px; height: 50px; border-radius: 50%; border: none; font-size: 20px; cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2); opacity: 0; visibility: hidden; transform: translateY(20px);
+      transition: all 0.3s ease; z-index: 999;
+    }
+    #go-top-btn.visible { opacity: 1; visibility: visible; transform: translateY(0); }
+    #go-top-btn:hover { background-color: var(--secondary); }
+  </style>
+</head>
+<body>
+  <!-- 헤더 -->
+  <header>
+    <nav>
+      <a href="#" class="logo"><i class="fa-solid fa-heart-pulse"></i> CareFit</a>
+      <div>
+        <span id="user-status" class="hidden"></span>
+        <button id="login-nav-btn">로그인</button>
+        <button id="signup-nav-btn">회원가입</button>
+        <button id="logout-btn" class="hidden">로그아웃</button>
+      </div>
+    </nav>
+    <div class="header-content">
+      <h2>안전하고 스마트한 만성질환 관리</h2>
+      <h3>건강 데이터를 기록하고 맞춤형 의료 가이드를 받아보세요</h3>
+      <p style="margin-bottom: 10px;">복용 중인 약물과 상충하는 음식 및 약물을 미리 검색해 예방하세요.</p>
+      <form class="add-search" id="food-search-form">
+        <input type="text" placeholder="예: 자몽, 커피, 수면제 등 입력" required>
+        <button type="submit">AI 분석</button>
+      </form>
+    </div>
+  </header>
+
+  <!-- 배너 (의학 기반 알고리즘 폼) -->
+  <section id="banner">
+    <div class="banner-content">
+      <h3>질환별 맞춤 운동 가이드를 시작하세요</h3>
+      <p>의학 데이터에 기반한 안전한 운동 처방을 제공합니다.</p>
+      <button id="banner-btn">프로그램 알아보기</button>
+    </div>
+    <h2 style="margin-top: 60px;">나의 주요 질환 설정</h2>
+    <select class="select-menu" id="disease-select">
+      <option value="">질환을 선택하세요 (의학 가이드 제공)</option>
+      <option value="diabetes">당뇨병</option>
+      <option value="hypertension">고혈압</option>
+      <option value="obesity">비만 (BMI 25 이상)</option>
+      <option value="arthritis">관절염</option>
+      <option value="pad">말초동맥질환(PAD)</option>
+    </select>
+  </section>
+
+  <!-- 멤버십 -->
+  <section id="membership">
+    <h2>CareFit 회원이 되시면</h2>
+    <div class="membership-content">
+      <h3>통합 헬스케어 멤버십 혜택</h3>
+      <p><i class="fa-solid fa-check" style="color: var(--secondary); margin-right: 10px;"></i> 건강보험공단(DUR) 데이터 자동 연동</p>
+      <p><i class="fa-solid fa-check" style="color: var(--secondary); margin-right: 10px;"></i> 주간/월간 마이 헬스 리포트 무상 발행</p>
+      <p><i class="fa-solid fa-check" style="color: var(--secondary); margin-right: 10px;"></i> AI 홈캠 낙상 감지 관제 서비스 연동 (프리미엄)</p>
+    </div>
+  </section>  
+
+  <!-- 가이드 -->
+  <section id="choice">
+    <h2>타입별 맞춤 케어 가이드</h2>
+    <div class="choice-content">
+      <div class="card">
+        <h3>당뇨 케어</h3> 
+        <p>주 200분 이상 운동 트래킹 및 식후 혈당 스파이크 방지</p>   
+        <div class="icon-img"><i class="fa-solid fa-cubes-stacked"></i></div>    
+      </div>
+      <div class="card">
+        <h3>비만/관절 케어</h3> 
+        <p>관절 부하를 최소화하는 고정식 자전거 및 수중 운동</p>
+        <div class="icon-img"><i class="fa-solid fa-person-walking"></i></div>  
+      </div>
+      <div class="card">
+        <h3>혈관 케어</h3> 
+        <p>말초동맥질환 파행(통증) 척도 모니터링 기반 보행</p>
+        <div class="icon-img"><i class="fa-solid fa-droplet"></i></div>  
+      </div>
+      <div class="card">
+        <h3>전문가 1:1 매칭</h3>     
+        <p>전담 건강운동관리사의 비대면 코칭</p>
+        <div class="icon-img"><i class="fa-solid fa-user-doctor"></i></div>  
+      </div>
+    </div>
+  </section>  
+
+  <!-- FAQ (골다공증 및 홈캠 의학 지식 반영) -->
+  <section id="faq">
+    <h2>자주하는 질문 (FAQ)</h2>
+    <ul class="accordion">
+      <li>
+        <input type="radio" name="accordion" id="first">
+        <label for="first">AI 홈캠은 낙상을 어떻게 예방하나요?</label>
+        <div class="content">          
+          <p>단순 쓰러짐 감지를 넘어, 낙상의 주요 원인인 <strong>'어두운 조명(환경적 요인)'</strong>과 <strong>'수면제/안정제 복용(약물 요인)'</strong> 데이터를 연동하여 고위험 상황 발생 시 사전에 경고 알림을 보냅니다.</p>
+        </div>
+      </li>
+      <li>
+        <input type="radio" name="accordion" id="second">
+        <label for="second">비만이나 관절염이 있어도 운동이 가능한가요?</label>
+        <div class="content">
+          <p>물론입니다. CareFit은 의학적 가이드라인에 따라, 관절염 및 비만(BMI 25 이상) 환자에게는 관절 손상 위험이 큰 고강도 저항 운동을 제외하고 <strong>수영, 고정식 자전거 타기 등 관절 부하가 적은 운동</strong>으로 자동 큐레이션 해드립니다.</p>
+        </div>
+      </li>
+      <li>
+        <input type="radio" name="accordion" id="third">
+        <label for="third">공공데이터(DUR) 연동은 안전한가요?</label>
+        <div class="content">
+          <p>네, CareFit은 보건복지부 및 건강보험공단의 엄격한 보안 프로토콜을 준수하며, 사용자 동의 하에 최소한의 복약 정보만 암호화하여 분석합니다.</p>
+        </div>
+      </li>
+    </ul>
+    
+    <div class="newsletter">
+      <h3 style="color: var(--primary); margin-bottom: 10px;">주간 건강 정보 구독</h3>
+      <p style="margin-bottom: 20px;">이메일 주소를 남겨주시면 매주 만성질환 예방 칼럼을 보내드립니다.</p>
+      <form class="add-search" id="newsletter-form">
+        <input type="email" placeholder="이메일 주소" required>
+        <button type="submit">구독하기</button>
+      </form>      
+    </div>
+  </section>  
+
+  <!-- 회원가입 모달 -->
+  <div class="modal-overlay" id="signup-modal">
+    <div class="modal-content">
+      <span class="close-btn">&times;</span> 
+      <h2>CareFit 회원가입</h2>
+      <input type="text" id="signup-id" placeholder="아이디">
+      <input type="password" id="signup-pw" placeholder="비밀번호">
+      <input type="password" id="signup-id-confirm" placeholder="비밀번호 확인">
+      <div id="signup-error" class="error-msg"></div>
+      <button class="submit-btn" id="signup-submit">가입하기</button>
+    </div>
+  </div>
+
+  <!-- 로그인 모달 -->
+  <div class="modal-overlay" id="login-modal">
+    <div class="modal-content">
+      <span class="close-btn">&times;</span>
+      <h2>로그인</h2>
+      <input type="text" id="login-id" placeholder="아이디">
+      <input type="password" id="login-pw" placeholder="비밀번호">
+      <div id="login-error" class="error-msg"></div>
+      <button class="submit-btn" id="login-submit">로그인하기</button>
+    </div>
+  </div>
+
+  <!-- 배너 버튼 모달 -->
+  <div class="modal-overlay" id="banner-modal">
+    <div class="modal-content">
+      <span class="close-btn">&times;</span>
+      <h2>맞춤 운동 프로그램 안내</h2>
+      <p style="margin-bottom: 15px; color: #64748b;">
+        CareFit의 AI 엔진이 사용자의 공복 혈당과 혈압 수치를 기반으로 가장 안전한 시간대와 운동 강도를 추천해 드립니다.
+      </p>
+      <p style="color: #64748b;">
+        스마트폰 카메라를 통해 관절의 움직임을 인식하는 스켈레톤 기술로 부상 없이 운동하세요!
+      </p>
+    </div>
+  </div>
+
+  <!-- 이벤트 모달 -->
+  <div class="modal-overlay" id="event-modal">
+    <div class="modal-content">
+      <span class="close-btn">&times;</span>
+      <h2><i class="fa-solid fa-gift" style="color: var(--secondary);"></i> 신규 가입 혜택</h2>
+      <div style="background: #f1f5f9; padding: 20px; border-radius: 8px; margin: 20px 0;">
+        <h3 style="color: var(--primary);">프리미엄 멤버십 1개월 무료</h3>
+      </div>
+      <p style="font-size: 14px; color: #64748b; margin-bottom: 5px;">신규 회원 가입 시 AI 홈캠 관제 및 건강 리포트</p>
+      <p style="font-size: 14px; color: #64748b;">프리미엄 서비스를 1개월 무료로 제공합니다.</p>
+    </div>
+  </div> 
+
+  <!-- 푸터 -->
+  <footer>
+    <div class="footer-content">
+      <div class="col left">
+        <h2 style="font-size: 24px;"><i class="fa-solid fa-heart-pulse"></i> CareFit</h2>
+        <ul class="footer-nav" style="display: flex; gap: 15px; margin-bottom: 20px;">
+          <li><a href="#">회사소개</a></li>
+          <li><a href="#">이용약관</a></li>
+          <li><a href="#" style="color: white; font-weight: bold;">개인정보 취급방침</a></li>
+        </ul>
+        <div class="footer-info">
+          <p>상호: (주)케어핏 (대표: 정민)</p>
+          <p>주소: 서울특별시 강남구 테헤란로 000</p>
+          <p>전화: 02-000-0000 | 사업자등록번호: 000-00-00000</p>
+        </div>
+      </div>
+      <div class="col center">
+        <h2>고객센터</h2>
+        <h3 style="color: var(--secondary); font-size: 28px; margin-bottom: 10px;">1588-0000</h3>
+        <p>월-금 09:00-18:00 (응급 관제센터 24시간 연중무휴)</p>
+        <ul class="socials">
+          <li><a href="#"><i class="fa-brands fa-instagram"></i></a></li>
+          <li><a href="#"><i class="fa-brands fa-youtube"></i></a></li>
+        </ul>
+      </div>
+      <div class="col right">
+        <h2>커뮤니티</h2>
+        <p style="margin-bottom: 10px;"><a href="#">의료진 공지사항</a></p>
+        <p style="margin-bottom: 10px;"><a href="#" id="event-btn">이벤트 혜택</a></p>
+        <p><a href="#">서비스 Q&A</a></p>
+      </div>
+    </div>
+    <div class="copyright">
+      <p>Copyright &copy; CareFit Inc. All rights reserved.</p>
+    </div>
+  </footer>  
+
+  <!-- 위로 가기 버튼 -->
+  <button id="go-top-btn" title="맨 위로 가기"><i class="fa-solid fa-arrow-up"></i></button>
+
+  <!-- JavaScript 로직 -->
+  <script>
+    // 1. AI 약물-음식 상호작용 검색 로직 (골다공증 자료 반영: 수면제/안정제 예외 처리 추가)
+    const foodSearchForm = document.getElementById("food-search-form");
+    if (foodSearchForm) {
+      foodSearchForm.addEventListener("submit", function(event) {
+        event.preventDefault();
+        const inputEl = this.querySelector("input");
+        const keyword = inputEl.value.trim().toLowerCase();
+
+        if (keyword) {
+          if (keyword.includes('수면제') || keyword.includes('안정제')) {
+            alert("⚠️ [위험] 수면제/안정제 복용 후에는 낙상 위험이 크게 증가합니다. 어두운 곳에서의 이동을 삼가고 AI 홈캠 모니터링을 활성화하세요.");
+          } else if (keyword.includes('자몽')) {
+            alert("⚠️ [위험] 자몽은 고혈압 약(칼슘채널차단제)의 농도를 높여 혈압을 급강하시킬 위험이 있습니다.");
+          } else if (keyword.includes('커피') || keyword.includes('카페인')) {
+            alert("🔔 [주의] 카페인은 일시적으로 혈압을 상승시킵니다. 약 복용 후 2시간 이후에 섭취하세요.");
+          } else {
+            alert(`✅ [안정] '${keyword}'은(는) 현재 복용 중인 약물과 충돌하는 성분이 발견되지 않았습니다.`);
+          }
+          inputEl.value = ""; 
+        }
+      });
+    }
+
+    // 뉴스레터 구독 로직
+    const newsletterForm = document.getElementById("newsletter-form");
+    if (newsletterForm) {
+      newsletterForm.addEventListener("submit", function(event) {
+        event.preventDefault();
+        const emailInput = this.querySelector("input");
+        if (emailInput.value) {
+          alert(emailInput.value + " (으)로 매주 건강 리포트를 보내드립니다.");
+          emailInput.value = ""; 
+        }
+      });
+    }
+
+    // 2. 의학 알고리즘이 적용된 질환 선택 동적 필터링 로직
+    const diseaseSelect = document.getElementById("disease-select");
+    if(diseaseSelect) {
+      diseaseSelect.addEventListener("change", function(e) {
+        const val = e.target.value;
+        if(!val) return;
+
+        let advice = "";
+        // 제공된 PDF 자료의 의학 수치와 가이드라인 기반 조건문
+        if (val === 'diabetes') {
+          advice = "💡 [당뇨병 의학 가이드]\n\n1주일에 200분 이상 운동 시 질환 발생 및 악화율이 46% 감소합니다.\n단, 운동 도중 수축기 혈압은 180mmHg 이하로 유지되도록 주의해 주세요.";
+        } else if (val === 'obesity' || val === 'arthritis') {
+          advice = "💡 [관절염/비만 의학 가이드]\n\n고강도 저항 운동이나 러닝은 관절 손상 위험이 큽니다.\n수영, 고정식 자전거 타기, 수중 운동 등 관절 부하가 적은 프로그램으로 대시보드를 전환합니다.";
+        } else if (val === 'pad') {
+          advice = "💡 [말초동맥질환 가이드]\n\n파행(통증) 척도 1~4단계를 모니터링하며, 트레드밀 걷기를 통한 재활 운동을 권장합니다.";
+        } else if (val === 'hypertension') {
+          advice = "💡 [고혈압 의학 가이드]\n\n나트륨을 제한하고 혈압을 모니터링하며 저강도 유산소 운동 프로그램으로 전환합니다.";
+        }
+        
+        alert(advice);
+      });
+    }
+
+    // 모달 열기/닫기 공통 로직
+    const openModal = (id) => {
+      const modal = document.getElementById(id);
+      if (modal) modal.classList.add('active');
+    };
+
+    const closeModal = () => {
+      document.querySelectorAll('.modal-overlay').forEach(modal => {
+        modal.classList.remove('active');
+      });
+      document.querySelectorAll('.modal-content input').forEach(input => input.value = '');
+      document.querySelectorAll('.error-msg').forEach(error => error.textContent = '');
+    };
+
+    document.querySelectorAll('.close-btn').forEach(btn => {
+      btn.onclick = closeModal;
+    });
+
+    // 회원가입 로직
+    const signupSubmit = document.getElementById('signup-submit');
+    if (signupSubmit) {
+      signupSubmit.onclick = () => {
+        const id = document.getElementById('signup-id').value.trim();
+        const pw = document.getElementById('signup-pw').value;
+        const pwConfirm = document.getElementById('signup-id-confirm').value; 
+        const errorEL = document.getElementById('signup-error');
+        
+        if (!id || !pw) {
+          errorEL.textContent = '아이디와 비밀번호를 입력해 주세요.';
+          return;
+        }
+
+        if (pw !== pwConfirm) { 
+          errorEL.textContent = '비밀번호가 일치하지 않습니다.';
+          return;
+        }
+
+        const accounts = JSON.parse(localStorage.getItem('accounts')) || [];
+
+        if (accounts.find(user => user.id === id)) {
+          errorEL.textContent = "이미 사용중인 아이디입니다.";
+          return;
+        }
+
+        accounts.push({ id, pw });
+        localStorage.setItem('accounts', JSON.stringify(accounts)); 
+
+        alert('CareFit 회원가입이 완료되었습니다! 로그인 해주세요.');
+        closeModal();
+      };
+    }
+
+    // 로그인 로직
+    const loginSubmit = document.getElementById('login-submit');
+    if (loginSubmit) {
+      loginSubmit.onclick = () => {
+        const id = document.getElementById('login-id').value.trim();
+        const pw = document.getElementById('login-pw').value;
+        const errorEl = document.getElementById('login-error');
+
+        const accounts = JSON.parse(localStorage.getItem('accounts')) || [];
+        const user = accounts.find(acc => acc.id === id && acc.pw === pw);
+
+        if (user) {
+          localStorage.setItem('loggedInUser', JSON.stringify(user));
+          alert(`환영합니다! ${user.id}님의 건강 데이터를 연동합니다.`);
+          closeModal();
+          updateUI(); 
+        } else {
+          errorEl.textContent = '아이디 또는 비밀번호가 일치하지 않습니다.';
+        }
+      };
+    }
+
+    // UI 업데이트 로직 (로그인 상태)
+    const updateUI = () => {
+      const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+      const userStatus = document.getElementById('user-status');
+      const loginNavBtn = document.getElementById('login-nav-btn');
+      const signupNavBtn = document.getElementById('signup-nav-btn');
+      const logoutBtn = document.getElementById('logout-btn');
+
+      if (loggedInUser) {
+        userStatus.textContent = `${loggedInUser.id}님 연동 중`;
+        userStatus.classList.remove('hidden');
+        logoutBtn.classList.remove('hidden');
+        loginNavBtn.classList.add('hidden');
+        signupNavBtn.classList.add('hidden');
+      } else {
+        userStatus.classList.add('hidden');
+        logoutBtn.classList.add('hidden');
+        loginNavBtn.classList.remove('hidden');
+        signupNavBtn.classList.remove('hidden');
+      }
+    };
+
+    // 로그아웃 로직
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+      logoutBtn.onclick = () => {
+        localStorage.removeItem('loggedInUser'); 
+        alert('안전하게 로그아웃 되었습니다.');
+        updateUI();
+      };
+    }
+
+    // 모달 버튼 이벤트 연결
+    document.getElementById('login-nav-btn').onclick = () => openModal('login-modal');
+    document.getElementById('signup-nav-btn').onclick = () => openModal('signup-modal');
+
+    const bannerBtn = document.getElementById('banner-btn');
+    if (bannerBtn) bannerBtn.onclick = () => openModal('banner-modal');
+
+    const eventBtn = document.getElementById('event-btn');
+    if (eventBtn) eventBtn.onclick = (e) => { e.preventDefault(); openModal('event-modal'); }
+
+    // 배경 클릭 시 모달 닫기
+    window.addEventListener('click', (e) => {
+      if (e.target.classList.contains('modal-overlay')) {
+        closeModal();
+      }
+    });
+
+    // 초기 실행
+    window.onload = () => {
+      updateUI(); 
+    };
+
+    // 위로 가기 버튼 로직
+    const goTopBtn = document.getElementById('go-top-btn');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        goTopBtn.classList.add('visible');
+      } else {
+        goTopBtn.classList.remove('visible');
+      }
+    });
+
+    goTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>
